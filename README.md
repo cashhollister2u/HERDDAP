@@ -1,3 +1,15 @@
+## Backend
+
+Run the fastAPI server:
+
+```bash
+cd backend
+```
+
+```bash
+uvicorn main:app --reload
+```
+
 ## Frontend
 
 Run the development server:
