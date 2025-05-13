@@ -82,7 +82,7 @@ export default function Home() {
     },
     rss: {
       label: "RSS",
-      render: (value) => <a href={value} target="_blank" rel="noopener noreferrer"><img src="../rss.gif" alt="rss img" /></a>
+      render: (value) => <a href={value} target="_blank" rel="noopener noreferrer"><img src="./rss.gif" alt="rss img" /></a>
     },
     institution: {
       label: "Institution",
@@ -128,7 +128,7 @@ export default function Home() {
       <main>
         <div className='header'>
           <a href="https://www.noaa.gov/">
-            <img className='header_image' src="../noaab.png" alt="noaab Logo" />
+            <img className='header_image' src="./noaab.png" alt="noaab Logo" />
           </a>
           <div className='header_text'>
             <h1>ERDDAP</h1>
