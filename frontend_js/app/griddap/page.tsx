@@ -1,4 +1,5 @@
 "use client";
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import ErddapTable from '../components/ErddapTable/ErddapTable';
 import SkeletonTable from '../components/SkeletonTable/SkeletonTable';
@@ -20,13 +21,6 @@ type ColumnRenderConfig = {
 export default function Home() {
   const [erddapResponse, setErddapResponse] = useState<ErddapResponse>();
   const [loading, setLoading] = useState(true);
-
-  const url = "http://localhost:8000/get-noaa-data";
-  const params = new URLSearchParams({
-    //page: '1',
-    //itemsPerPage: '50',
-    //"Dataset ID": "" // You can specify a dataset ID here if needed
-  });
 
   function truncateString(str: string, maxLength: number=15): string {
     return str.length > maxLength
@@ -85,7 +79,7 @@ export default function Home() {
     },
     rss: {
       label: "RSS",
-      render: (value) => <a href={value} target="_blank" rel="noopener noreferrer"><img src="./rss.gif" alt="rss img" /></a>
+      render: (value) => <a href={value} target="_blank" rel="noopener noreferrer"><Image src="/rss.gif" width={"40"} height={"40"} alt="rss img" /></a>
     },
     institution: {
       label: "Institution",
@@ -105,24 +99,34 @@ export default function Home() {
       .replace(/[^a-z0-9_]/g, ''); // Remove special characters if needed
   }
 
-  // Function to fetch data from ERDDAP
-  async function fetchErddapData(): Promise<void> {
-    try {
-      const response = await fetch(`${url}?${params.toString()}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
   
-      const data: ErddapResponse = await response.json();
-      data.table.columnNames = data.table.columnNames.map(normalizeColumnName)
-      setErddapResponse(data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching ERDDAP data:", error);
-    }
-  }
 
   useEffect(() => {
+    // const url = "https://www.ncei.noaa.gov/erddap/griddap/index.json";
+    const url = "http://localhost:8000/get-noaa-data";
+    const params = new URLSearchParams({
+      //page: '1',
+      //itemsPerPage: '50',
+      //"Dataset ID": "" // You can specify a dataset ID here if needed
+    });
+
+    // Function to fetch data from ERDDAP
+    async function fetchErddapData(): Promise<void> {
+      try {
+        const response = await fetch(`${url}?${params.toString()}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    
+        const data: ErddapResponse = await response.json();
+        data.table.columnNames = data.table.columnNames.map(normalizeColumnName)
+        setErddapResponse(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching ERDDAP data:", error);
+      }
+    }
+
     fetchErddapData();
   }, []);
   
@@ -131,7 +135,7 @@ export default function Home() {
       <main>
         <div className='header'>
           <a href="https://www.noaa.gov/">
-            <img className='header_image' src="./noaab.png" alt="noaab Logo" />
+            <Image className='header_image' src="/noaab.png" width={60} height={60} alt="noaab Logo" />
           </a>
           <div className='header_text'>
             <h1>ERDDAP</h1>
@@ -155,7 +159,7 @@ export default function Home() {
             satellite data and climate model data). For details, see:
           </p>
           <a href='https://www.ncei.noaa.gov/erddap/griddap/documentation.html' target="_blank" rel="noopener noreferrer">
-            - ERDDAP's griddap Documentation.
+            - ERDDAP&apos;s griddap Documentation.
           </a>
         </div>
         <div id='popup' className="popup">
