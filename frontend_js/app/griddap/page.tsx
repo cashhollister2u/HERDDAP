@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
+import ErddapTable from '../components/ErddapTable/ErddapTable';
+import SkeletonTable from '../components/SkeletonTable/SkeletonTable';
 import './style.css';
 
 interface ErddapResponse {
@@ -16,13 +18,14 @@ type ColumnRenderConfig = {
 }
 
 export default function Home() {
-  const [erddapResponse, setErddapResponse] = useState<ErddapResponse | null>(null);
+  const [erddapResponse, setErddapResponse] = useState<ErddapResponse>();
+  const [loading, setLoading] = useState(true);
 
-  const url = "https://www.ncei.noaa.gov/erddap/griddap/index.json";
+  const url = "http://localhost:8000/get-noaa-data";
   const params = new URLSearchParams({
-    page: '1',
-    itemsPerPage: '50',
-    "Dataset ID": "" // You can specify a dataset ID here if needed
+    //page: '1',
+    //itemsPerPage: '50',
+    //"Dataset ID": "" // You can specify a dataset ID here if needed
   });
 
   function truncateString(str: string, maxLength: number=15): string {
@@ -113,7 +116,7 @@ export default function Home() {
       const data: ErddapResponse = await response.json();
       data.table.columnNames = data.table.columnNames.map(normalizeColumnName)
       setErddapResponse(data);
-
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching ERDDAP data:", error);
     }
@@ -166,32 +169,13 @@ export default function Home() {
             <button className="popup-close" onClick={() => togglePopup("")}>close</button>
           </div>
         </div>
-        <table>
-          <thead>
-            <tr>
-              {erddapResponse?.table.columnNames.map((column, colIndex) => (
-                <th key={colIndex}>
-                  {columnRenderMap[column]?.label ?? column}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {erddapResponse?.table.rows.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {row.map((value, colIndex) => {
-                  const columnName = erddapResponse.table.columnNames[colIndex];
-                  const config = columnRenderMap[columnName] || {};
-                  return (
-                    <td key={colIndex} className={config.className ?? ""}>
-                      {config.render ? config.render(value) : value}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {/*<ErddapTable columns={erddapResponse?.table.columnNames} rows={erddapResponse?.table.rows} columnRenderMap={columnRenderMap} />*/}
+          {loading ? (
+            <SkeletonTable />
+          ) : (
+            <ErddapTable columns={erddapResponse?.table.columnNames} rows={erddapResponse?.table.rows} columnRenderMap={columnRenderMap} />
+          )}
+        
         <div className='body_text'>
           <p>
             The information in the table above is also available in 
