@@ -4,10 +4,10 @@ import httpx
 import asyncio
 from fastapi.middleware.cors import CORSMiddleware
 
-noaa_data_cache = None  # Global in-memory cache
+noaa_data_cache = None  # Global in-memory cache ** Remove if caching not needed
 
 async def fetch_noaa_data():
-    """Fetch NOAA data from the URL and store it in memory."""
+    """Fetch NOAA data from the URL and store it in memory or return cached data."""
     # params
     page=1
     itemsPerPage=100
@@ -19,11 +19,16 @@ async def fetch_noaa_data():
         try:
             response = await client.get(url)
             response.raise_for_status()
-            noaa_data_cache = response.json()
-            print("NOAA data refreshed.")
+            noaa_data = response.json()
+            #noaa_data_cache = noaa_data  # Store in global cache
+            print("NOAA data pulled.")
+            return noaa_data
         except httpx.HTTPError as e:
             print(f"Failed to fetch NOAA data: {e}")
 
+## Uncomment the lifespan function and add lifespan param to "FastAPI()" to enable periodic data fetching ##
+
+'''
 async def refresh_data_periodically():
     """Background task to refresh NOAA data every 5 minutes."""
     while True:
@@ -37,10 +42,11 @@ async def lifespan(app: FastAPI):
     # Start background refresh task
     refresh_task = asyncio.create_task(refresh_data_periodically())
     yield
-    refresh_task.cancel()  # Stop the task on shutdown
+    refresh_task.cancel()  # Stop the task on shutdown'''
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI() # "lifespan=lifespan" add for periodic tasks 
 
+# CORS middleware to allow requests from the frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],  
@@ -49,8 +55,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Route to fetch NOAA data
 @app.get("/get-noaa-data")
 async def get_noaa_data():
     if noaa_data_cache is None:
-        return {"error": "Data not yet available"}
+        return await fetch_noaa_data()
     return noaa_data_cache
