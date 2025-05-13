@@ -1,3 +1,10 @@
+### Notes:
+
+- Using fastAPI to cache data ahead of time is slightly faster.
+- Look into using fastAPI for loading static files instead of NextJS.
+    - Use Jinja2 to pass python variables to html similarly to how NextJS does.
+    - Remove caching functionality if not needed.
+    
 ## Backend
 
 Run the fastAPI server:
@@ -27,3 +34,5 @@ pnpm dev
 # or
 bun dev
 ```
+
+
