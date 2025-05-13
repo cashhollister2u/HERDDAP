@@ -1,10 +1,9 @@
-
 ## Getting Started
 
 First, run the development server:
 
 ```bash
-cd herddap_js
+cd frontend_js
 ```
 
 ```bash
@@ -16,4 +15,3 @@ pnpm dev
 # or
 bun dev
 ```
-
