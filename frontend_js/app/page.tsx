@@ -5,7 +5,7 @@ export default function Home() {
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <h1> TO DO: Landing Page</h1>
         <h2>Active Pages:</h2>
-        <p>/griddap</p>
+        <a href="/griddap">/griddap</a>
       </main>
     </div>
   );
