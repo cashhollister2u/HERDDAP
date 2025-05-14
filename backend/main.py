@@ -3,6 +3,10 @@ from contextlib import asynccontextmanager
 import httpx
 import asyncio
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 noaa_data_cache = None  # Global in-memory cache ** Remove if caching not needed
 
@@ -61,3 +65,20 @@ async def get_noaa_data():
     if noaa_data_cache is None:
         return await fetch_noaa_data()
     return noaa_data_cache
+
+
+
+
+# Mount the "static" directory to serve static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Set up Jinja2 templates
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/griddap", response_class=HTMLResponse)
+async def read_root(request: Request):
+    return templates.TemplateResponse("griddap/index.html", {"request": request})
