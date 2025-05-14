@@ -5,7 +5,7 @@
     - Use Jinja2 to pass python variables to html similarly to how NextJS does.
     - Remove caching functionality if not needed.
     
-## Backend
+## fastAPI_py
 
 Run the fastAPI server:
 
@@ -17,7 +17,7 @@ cd backend
 uvicorn main:app --reload
 ```
 
-## Frontend
+## frontend_js
 
 Run the development server:
 

@@ -1,9 +1,9 @@
-## Backend
+## fastAPI_py
 
 Run the fastAPI server:
 
 ```bash
-cd backend
+cd fastAPI_py
 ```
 
 ```bash
