@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=6">
     <title>FastAPI with CSS</title>
   </head>
   <div>
@@ -32,6 +32,7 @@
           <button class="popup-close">close</button>
         </div>
       </div>
+      {% include "components/table.html" %}
       <div class='body_text'>
         <p>
           The information in the table above is also available in 

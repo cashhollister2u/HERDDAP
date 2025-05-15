@@ -129,9 +129,10 @@
     cursor: pointer;
   }
   
-  td .content {
+  .content {
     word-break: break-word;
     white-space: normal;
+    color: green;
   }
   
   /* === POPUP === */

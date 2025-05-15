@@ -1,0 +1,25 @@
+<table>
+    <thead>
+      <tr>
+        {% for column in columns %}
+          <th>
+            {{ column_render_map[column].label if column_render_map[column] and column_render_map[column].label else column }}
+          </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+        <tr>
+          {% for value, column in zip(row, columns) %}
+            {% set config = column_render_map.get(column, {}) %}
+            <td class="{{ config.get('class', '') }}">
+                {% set render = config.get('render') %}
+                {% set render_param = config.get('render_param') %}
+                {{ render(value, render_param) | safe if render else value }}
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>

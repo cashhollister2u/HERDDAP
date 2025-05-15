@@ -50,24 +50,20 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI() # "lifespan=lifespan" add for periodic tasks 
 
-# CORS middleware to allow requests from the frontend
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
-# Route to fetch NOAA data
-@app.get("/get-noaa-data")
-async def get_noaa_data():
-    if noaa_data_cache is None:
-        return await fetch_noaa_data()
-    return noaa_data_cache
+def render_link(value, data_label):
+    return f"<a href='{value}'>{data_label}</a>"
 
+def render_img(value, src):
+    return f"<a href='{value}'><img src='{src}'></a>"
 
+def render_button(value, data_label):
+    return f"<button>{data_label}</button>"
 
+def truncate_string(value, length=20):
+    if len(value) > length:
+        return value[:length] + "..."
+    return value
 
 # Mount the "static" directory to serve static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -76,9 +72,87 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
-async def read_root(request: Request):
+async def landing_page(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/griddap", response_class=HTMLResponse)
-async def read_root(request: Request):
-    return templates.TemplateResponse("griddap/index.html", {"request": request})
+async def griddap_page(request: Request):
+    table_data = await fetch_noaa_data()
+    columns = table_data['table']['columnNames']
+    print(columns)
+    rows = table_data['table']['rows']
+    column_render_map = {
+        "griddap": {
+            "label": "Griddap", 
+            "class": "content",
+            "render": render_link,
+            "render_param": "data",
+            },
+        "Subset": {
+            "label": "Subset", 
+            "class": ""
+            },
+        "tabledap": {
+            "label": "Table DAP Data", 
+            "class": ""
+            },
+        "Make A Graph": {
+            "label": "Make A Graph", 
+            "class": "",
+            "render": render_link,
+            "render_param": "graph"
+            },
+        "wms": {
+            "label": "WMS", 
+            "class": ""
+            },
+        "files": {
+            "label": "Source Data Files", 
+            "class": ""
+            },
+        "Title": {
+            "label": "Title", 
+            "class": "content"
+            },
+        "Summary": {
+            "label": "Summary", 
+            "class": "",
+            "render": render_button,
+            "render_param": "Summary"
+            },
+        "Info": {
+            "label": "Meta Data", 
+            "class": "",
+            "render": render_link,
+            "render_param": "M"
+            },
+        "Background Info": {
+            "label": "Background Info", 
+            "class": "",
+            "render": render_link,
+            "render_param": "background"
+            },
+        "RSS": {
+            "label": "RSS", 
+            "class": "",
+            "render": render_img,
+            "render_param": "/static/images/rss.gif"
+            },
+        "Institution": {
+            "label": "Institution", 
+            "class": "",
+            "render": truncate_string,
+            "render_param": 15
+            },
+        "Dataset ID": {
+            "label": "Dataset ID", 
+            "class": "content"
+            },
+
+    }
+    return templates.TemplateResponse("griddap/index.html", {
+        "request": request,
+        "columns": columns,
+        "rows": rows,
+        "column_render_map": column_render_map,
+        "zip":zip})
