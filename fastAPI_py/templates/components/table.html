@@ -1,25 +1,48 @@
+<script>
+    function showPopup(msg) {
+        const popup = document.getElementById('popup');
+        const popupBody = document.getElementById("popup-msg");
+        popup.classList.add('show');
+        popupBody.innerHTML = msg;
+    }
+    function closePopup() {
+        const popup = document.getElementById('popup');
+        const popupBody = document.getElementById("popup-msg");
+        popup.classList.remove('show');
+        popupBody.innerHTML = "";
+    }
+</script>
+<div id='popup' class="popup">
+    <div class="popup-content">
+        <div class='popup-body'>
+            <h1>Summary:</h1>
+            <p id='popup-msg'></p>
+        </div>
+        <button class="popup-close" onclick="closePopup()">close</button>
+    </div>
+</div>
 <table>
     <thead>
-      <tr>
+        <tr>
         {% for column in columns %}
-          <th>
-            {{ column_render_map[column].label if column_render_map[column] and column_render_map[column].label else column }}
-          </th>
+            <th>
+                {{ column_render_map[column].label if column_render_map[column] and column_render_map[column].label else column }}
+            </th>
         {% endfor %}
-      </tr>
+        </tr>
     </thead>
     <tbody>
-      {% for row in rows %}
+        {% for row in rows %}
         <tr>
-          {% for value, column in zip(row, columns) %}
+            {% for value, column in zip(row, columns) %}
             {% set config = column_render_map.get(column, {}) %}
             <td class="{{ config.get('class', '') }}">
                 {% set render = config.get('render') %}
                 {% set render_param = config.get('render_param') %}
                 {{ render(value, render_param) | safe if render else value }}
             </td>
-          {% endfor %}
+            {% endfor %}
         </tr>
-      {% endfor %}
+        {% endfor %}
     </tbody>
-  </table>
+</table>
