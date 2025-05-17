@@ -9,11 +9,15 @@ column_render_map = {
             },
         "Subset": {
             "label": "Subset", 
-            "class": ""
+            "class": "",
+            "render": render_link,
+            "render_param": "set",
             },
         "tabledap": {
             "label": "Table DAP Data", 
-            "class": ""
+            "class": "",
+            "render": render_link,
+            "render_param": "data",
             },
         "Make A Graph": {
             "label": "Make A Graph", 

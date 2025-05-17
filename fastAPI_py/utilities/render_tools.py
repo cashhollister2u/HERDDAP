@@ -4,7 +4,9 @@ def render_text(value, width):
     return f'<span style="display: inline-block; width: {width};" >{value}</span>'
 
 def render_link(value, data_label):
-    return f"<a href='{value}'>{data_label}</a>"
+    if value:
+        return f"<a href='{value}'>{data_label}</a>"
+    return f"<span></span>"
 
 def render_img(value, src):
     return f"<a href='{value}'><img src='{src}'></a>"

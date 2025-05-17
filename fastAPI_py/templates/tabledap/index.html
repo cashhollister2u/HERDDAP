@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/css/style.css?v=10">
+    <title>FastAPI with CSS</title>
+  </head>
+  <div>
+    <main>
+      {% include "components/header.html" %}
+      <div class='body_text'>
+        <h1>
+        <a href='/'>
+          ERDDAP
+        </a> / tabledap</h1>
+        <p>
+          Tabledap lets you use the OPeNDAP constraint/selection 
+          protocol to request data subsets, graphs, and maps from 
+          tabular datasets (for example, buoy data). For a quick 
+          introduction, see this
+          <a href='https://www.youtube.com/watch?v=_BwMHRh7CS8' target="_blank" rel="noopener noreferrer">
+            video introduction to using tabledap.
+          </a>
+          For details, see:
+        </p>
+        <a href='https://www.ncei.noaa.gov/erddap/tabledap/documentation.html' target="_blank" rel="noopener noreferrer">
+          - ERDDAP's tabledap Documentation
+        </a>
+        
+      </div>
+      {% include "components/table.html" %}
+      <div class='body_text'>
+        <p>
+          The information in the table above is also available in 
+          other file formats (.csv, .htmlTable, .itx, .json, .jsonlCSV1, 
+          .jsonlCSV, .jsonlKVP, .mat, .nc, .nccsv, .tsv, .xhtml)
+          <a href='https://www.ncei.noaa.gov/erddap/rest.html' target="_blank" rel="noopener noreferrer">
+            via a RESTful web service.
+          </a>
+        </p>
+      </div>
+      {% include "components/footer.html" %}
+    </main>
+</html>
