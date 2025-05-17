@@ -70,6 +70,7 @@ async def griddap_page(request: Request):
         "request": request,
         "columns": columns,
         "rows": rows,
+        "row_count": len(rows),
         "column_render_map": column_render_map,
         "zip":zip})
 
@@ -87,5 +88,6 @@ async def tabledap_page(request: Request):
         "request": request,
         "columns": columns,
         "rows": rows,
+        "row_count": len(rows),
         "column_render_map": column_render_map,
         "zip":zip})
