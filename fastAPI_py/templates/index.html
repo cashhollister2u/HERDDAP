@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <title>FastAPI with CSS</title>
-  </head>
     <main>
       {% include "components/header.html" %}
-      <h1> TO DO: Landing Page</h1>
-      <h2>Active Pages:</h2>
-      <a href="/griddap">/griddap</a>
-      <a href="/tabledap">/tabledap</a>
-      {% include "components/footer.html" %}
+      <div class="body_text"></div>
+        <h1> TO DO: Landing Page</h1>
+        <h2>Active Search Methods:</h2>
+        <p><a href="/category">/category</a></p>
+        <h2>Active Dataset Pages:</h2>
+        <p><a href="/info">/info </a>{{ total_dataset_count }} Datasets Available</p>
+        <p><a href="/griddap">/griddap</a></p>
+        <a href="/tabledap">/tabledap</a>
+        {% include "components/footer.html" %}
+      </div>
+      </main>
     </main>
 </html>
